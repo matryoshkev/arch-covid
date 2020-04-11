@@ -295,7 +295,7 @@ plot_stepwise <- ggplot(data = data_for_plot) +
 		legend.position = "none", text = element_text(size = 10)
 	)
 # dev.new(width = 6.5, height = 3.5)
-plot(plot_stepwise)
+# plot(plot_stepwise)
 ggsave("results/stepwise.pdf", plot_stepwise, device = "pdf", width = 6.5, height = 3.5)
 
 # Clean up
