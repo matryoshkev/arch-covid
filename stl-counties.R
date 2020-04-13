@@ -1,17 +1,9 @@
 # Epidemiological dynamics of COVID-19 in the St Louis metropolitan area
 # jeff smith 2020
 
-# Plot data
-# - cumulative cases vs time
-# - new cases (in last X days) vs time
-# 
-# - map current cases by zip
-# - cumulative deaths
-# - new deaths
-# 
-
 # TO DO: 
-# - confirm that lag() and lead() are doing what we expect them to (no missing dates)
+# - pull data directly from Johns Hopkins and NY Times
+# - clean up workspace objects at end of script
 
 # Dependencies
 library("readr")
@@ -53,6 +45,7 @@ data_counties <- data_counties %>%
 		cases_next = lead(cases, n = serial_interval) - cases
 	) %>%
 	mutate(R_effective = cases_next / cases_prev) %>%
+	# mutate(time_step = date - lag(date, n = 1)) %>%
 	ungroup()
 data_metro <- data_metro %>%
 	arrange(date, .by_group = TRUE) %>%
@@ -297,5 +290,29 @@ plot_stepwise <- ggplot(data = data_for_plot) +
 plot(plot_stepwise)
 ggsave("results/stl-stepwise.pdf", plot_stepwise, device = "pdf", width = 6.5, height = 4)
 
-# Clean up
-# rm(serial_interval, my_limits, my_minor_breaks, data_for_plot)
+
+#
+# Plot: Estimated R
+# 
+
+dev.new(width = 6.5, height = 5)
+data_for_plot <- data_counties %>%
+	filter(
+		!is.na(cases_next) & !is.na(cases_prev), 
+		county %in% c(
+			"St. Louis County", "St. Louis City", "St. Charles County", 
+			"St. Clair County", "Madison County", 
+			"Jefferson County", "Franklin County"
+		), 
+		date > ymd("2020-03-26")
+	)
+ggplot(data_for_plot) + 
+	aes(x = date, y = R_effective) + 
+	facet_wrap(~ county, ncol = 3) + 
+	geom_hline(yintercept = 1, color = grey(0.5), linetype = "dashed") + 
+	geom_line() + geom_point(size = 1) + 
+	scale_x_date() + 
+	scale_y_continuous(limits = c(0, 5)) + 
+	labs(y = "Effective reproductive rate") + 
+	theme(text = element_text(size = 10))
+
