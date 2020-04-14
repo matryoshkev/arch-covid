@@ -277,7 +277,7 @@ plot_stepwise <- ggplot(data = data_for_plot) +
 			"Plot by jeff smith, Ph.D. ", 
 			"with data compiled by Chris Prener, Ph.D.\n", 
 			"from Johns Hopkins University CSSE and New York Times COVID-19 Projects\n", 
-			"Showing data >", case_cutoff, " cases. ", 
+			# "Showing data >", case_cutoff, " cases. ", 
 			"Latest data: ", max(data_counties$date), 
 			sep = ""
 		))
@@ -287,7 +287,7 @@ plot_stepwise <- ggplot(data = data_for_plot) +
 		legend.position = "none", text = element_text(size = 10)
 	)
 # dev.new(width = 6.5, height = 4)
-plot(plot_stepwise)
+# plot(plot_stepwise)
 ggsave("results/stl-stepwise.pdf", plot_stepwise, device = "pdf", width = 6.5, height = 4)
 
 
@@ -306,13 +306,15 @@ data_for_plot <- data_counties %>%
 		), 
 		date > ymd("2020-03-26")
 	)
-ggplot(data_for_plot) + 
+plot_effective_R <- ggplot(data_for_plot) + 
 	aes(x = date, y = R_effective) + 
 	facet_wrap(~ county, ncol = 3) + 
 	geom_hline(yintercept = 1, color = grey(0.5), linetype = "dashed") + 
 	geom_line() + geom_point(size = 1) + 
 	scale_x_date() + 
 	scale_y_continuous(limits = c(0, 5)) + 
-	labs(y = "Effective reproductive rate") + 
+	labs(x = "", y = "Effective reproductive rate") + 
 	theme(text = element_text(size = 10))
+plot(plot_effective_R)
+ggsave("results/stl-effective-R.pdf", plot_effective_R, device = "pdf", width = 6.5, height = 5)
 
