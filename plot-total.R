@@ -32,14 +32,17 @@ my_theme <- theme(text = element_text(size = 10), axis.title.x = element_blank()
 plot_cases <- data_metro %>%
 	ggplot(mapping = aes(x = date, y = cases)) + 
 	geom_col() + 
-	labs(y = "Cumulative confirmed cases") + 
+	labs(
+		y = "Cumulative confirmed cases", 
+		title = "Spread of COVID-19 in the St Louis metro area"
+	) + 
 	my_theme
 plot_new_cases <- data_metro %>%
 	ggplot(mapping = aes(x = date, y = new_cases)) + 
 	geom_col() + 
 	labs(
 		y = "New confirmed cases", 
-		caption = (paste0("\n Plot by jeff smith. Data from Johns Hopkins University CSSE")) 
+		caption = (paste0("\n Data from Johns Hopkins University CSSE")) 
 	) + 
 	my_theme
 pdf(file = NULL)  # start bug workaround
