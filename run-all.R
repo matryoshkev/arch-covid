@@ -9,8 +9,11 @@ library("dplyr")
 library("lubridate")
 library("tidyr")
 library("ggplot2")
+library("scales")
+library("gtable")
 
 # Scripts
 source("scripts/01-get-data.R")
+source("scripts/02-plot-total.R")
 
 

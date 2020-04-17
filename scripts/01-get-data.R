@@ -11,11 +11,12 @@
 
 testing_data <- RCurl::getURL("https://covidtracking.com/api/v1/states/daily.csv")
 testing_data <- readr::read_csv(testing_data)  
+write_csv(testing_data, "data/data-testing-raw.csv")
 testing_data <- testing_data %>% 
 	select(date, state, positive, negative, totalTestResults) %>%
+	rename(total = totalTestResults) %>%
 	mutate(date = ymd(date))  
 write_csv(testing_data, "data/data-testing.csv")
-	# Comes in long format
 
 
 # Get confirmed case data 
@@ -27,6 +28,7 @@ write_csv(testing_data, "data/data-testing.csv")
 
 case_data <- RCurl::getURL("https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_US.csv")
 case_data <- readr::read_csv(case_data)
+write_csv(case_data, "data/data-cases-raw.csv")
 case_data <- case_data %>%
 	rename_at(vars(contains("/")), list(mdy)) %>%   # format dates as YYYY-MM-DD
 	select(-c(iso2, iso3, code3, FIPS, Country_Region, Lat, Long_)) %>%
@@ -36,7 +38,6 @@ case_data <- case_data %>%
 		county_label = Combined_Key
 	)
 write_csv(case_data, "data/data-cases.csv")
-	# Comes in wide format
 
 
 # 

@@ -1,5 +1,8 @@
 # Analyze case testing effort
 
+# TO DO: These are CUMULATIVE counts
+
+
 # Dependencies
 library("readr")
 library("dplyr")
@@ -10,14 +13,24 @@ library("scales")
 library("gtable")
 
 # Read and format testing data
-testing_data <- read_csv("data/data-testing.csv") %>% 
+data_testing <- read_csv("data/data-testing.csv") %>% 
 	filter(state %in% c("MO", "IL")) %>%
 	mutate(state = case_when(
-			state == "MO" ~ "Missouri", 
-			state == "IL" ~ "Illinois"
+		state == "MO" ~ "Missouri", 
+		state == "IL" ~ "Illinois"
 	)) %>%
-	mutate(state = relevel(factor(state), ref = "Missouri")) %>%
-	mutate(fraction_positive = positive / total)
+	mutate(state = relevel(factor(state), ref = "Missouri"))
+
+# Calculate fraction positive in last X days
+lag_time <- 7 # days
+data_testing <- data_testing %>%
+	group_by(state) %>%
+	arrange(date, .by_group = TRUE) %>%
+	mutate(
+		positive_new  = positive - lag(positive, n = lag_time), 
+		total_new     = total - lag(total, n = lag_time), 
+		rate_positive = positive_new / total_new
+	)
 
 # Plot testing data
 my_theme <- theme(
@@ -25,7 +38,7 @@ my_theme <- theme(
 	axis.title.x = element_blank(), 
 	strip.background = element_blank()
 )
-plot_count <- testing_data %>% 
+plot_count <- data_testing %>% 
 	select(date, state, positive, negative) %>%
 	pivot_longer(cols = c(positive, negative), names_to = "result", values_to = "tests") %>% 
 	mutate(result = relevel(factor(result), ref = "positive")) %>%
@@ -42,13 +55,13 @@ plot_count <- testing_data %>%
 			legend.justification = c(1.15, -0.15), 
 			strip.text = element_text(size = 11)
 		)
-plot_fraction_positive <- testing_data %>%
-	filter(!is.na(fraction_positive)) %>% 
-	ggplot(mapping = aes(x = date, y = fraction_positive)) + 
+plot_positive <- data_testing %>%
+	filter(!is.na(rate_positive)) %>% 
+	ggplot(mapping = aes(x = date, y = rate_positive)) + 
 		facet_wrap(~ state, ncol = 2) + 
 		geom_line() + geom_point(size = 0.75) + 
 		scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) + 
-		labs(y = "Fraction positive") + 
+		labs(y = paste("Fraction positive in last", lag_time, "days")) + 
 		my_theme + 
 		theme(strip.text = element_blank())
 pdf(file = NULL)  
@@ -56,7 +69,7 @@ pdf(file = NULL)
 	# see https://github.com/tidyverse/ggplot2/issues/809
 plot_testing <- gtable_add_grob(
 	gtable(widths = unit(rep(1, 1), "null"), heights = unit(rep(1, 7), "null")), 
-	list(ggplotGrob(plot_count), ggplotGrob(plot_fraction_positive)), 
+	list(ggplotGrob(plot_count), ggplotGrob(plot_positive)), 
 	l = c(1, 1), r = c(1, 1), t = c(1, 5), b = c(4, 7)
 )
 dev.off()  # end of workaround
@@ -65,8 +78,7 @@ dev.off()  # end of workaround
 ggsave("results/testing.pdf", plot = plot_testing, width = 6, height = 5)
 
 # MO didn't start reporting good negative test numbers until 2020-03-28
-# IL testing effort stabilizes at 2020-03-29
 
 # Clean up
-rm(testing_data, my_theme, plot_count, plot_fraction_positive, plot_testing)
+rm(data_testing, lag_time, my_theme, plot_count, plot_positive, plot_testing)
 
