@@ -60,24 +60,24 @@ data_testing <- read_csv("data/data-testing.csv") %>%
 # Plot data
 
 date_limits <- c(min(filter(data_cases, cases > 0)$date), max(data_cases$date))
-my_theme <- theme(text = element_text(size = 10), axis.title.x = element_blank())
+my_theme <- theme(text = element_text(size = 9), axis.title.x = element_blank())
 
 
 # Plot cumulative cases
-dev.new(width = 5.5, height = 3)
-plot_cases <- data_cases %>% 
-	filter(cases > 0) %>%
-	ggplot(mapping = aes(x = date, y = cases, color = county)) + 
-		facet_wrap(~ state, ncol = 2) + 
-		geom_line() + geom_point(size = 0.5) + 
-		scale_x_date(limits = date_limits) + 
-		scale_y_log10() + 
-		labs(y = "Cumulative confirmed cases") + 
-		my_theme
-plot(plot_cases)
+# dev.new(width = 5.5, height = 3)
+# plot_cases <- data_cases %>% 
+	# filter(cases > 0) %>%
+	# ggplot(mapping = aes(x = date, y = cases, color = county)) + 
+		# facet_wrap(~ state, ncol = 2) + 
+		# geom_line() + geom_point(size = 0.5) + 
+		# scale_x_date(limits = date_limits) + 
+		# scale_y_log10() + 
+		# labs(y = "Cumulative confirmed cases") + 
+		# my_theme
+# plot(plot_cases)
 
 # Plot new case activity
-dev.new(width = 5.5, height = 3)
+# dev.new(width = 5.5, height = 3)
 plot_new_cases <- data_cases %>% 
 	filter(cases > 0, !is.na(new_cases), new_cases > 3) %>%
 	ggplot(mapping = aes(x = date, y = new_cases, color = county)) + 
@@ -95,7 +95,7 @@ plot_new_cases <- data_cases %>%
 			# strip.text = element_blank(), 
 			legend.position = "top"
 		)
-plot(plot_new_cases)
+# plot(plot_new_cases)
 
 # Plot positive test rate
 plot_positive <- data_testing %>%
@@ -104,23 +104,39 @@ plot_positive <- data_testing %>%
 		facet_wrap(~ state, ncol = 2) + 
 		geom_line() + geom_point(size = 0.75) + 
 		scale_x_date(limits = date_limits) + 
-		scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.2)) + 
-		labs(y = paste("Fraction tests positive\nover last", lag_time, "days")) + 
+		scale_y_continuous(
+			limits = c(0, 1), 
+			breaks = seq(0, 1, by = 0.5), 
+			minor_breaks = seq(0, 1, by = 0.1)
+		) + 
+		labs(
+			y = paste(
+				"Positive test rate\n", "(past", lag_time, "days)"
+			), 
+			caption = paste0(
+				"\n", 
+				"Cases are better indicator of virus activity when positive test rate is stable\n", 
+				"Cases are time-delayed undercount of actual infections\n", 
+				"Data from Johns Hopkins CSSE and The COVID Tracking Project\n"
+			)
+		) + 
 		my_theme + 
 		theme(strip.text = element_blank())
-plot(plot_positive)
+# plot(plot_positive)
 
-
+# Make combined plot
 pdf(file = NULL)  # start bug workaround
 plot_activity <- gtable_add_grob(
-	gtable(widths = unit(rep(1, 1), "null"), heights = unit(rep(1, 13), "null")), 
+	gtable(widths = unit(rep(1, 1), "null"), heights = unit(rep(1, 17), "null")), 
 	list(ggplotGrob(plot_new_cases), ggplotGrob(plot_positive)), 
-	l = c(1, 1), r = c(1, 1), t = c(1, 9), b = c(8, 13)
+	l = c(1, 1), r = c(1, 1), t = c(1, 11), b = c(10, 17)
 )
 dev.off()  # end bug workaround
-# dev.new(width = 5.5, height = 5)
-plot(plot_activity)
-ggsave("results/stl-activity.pdf", plot = plot_activity, width = 5.5, height = 5)
+# dev.new(width = 6, height = 5.5)
+# plot(plot_activity)
+ggsave("results/stl-activity.pdf", plot = plot_activity, width = 6, height = 5)
+
+
 
 # data_cases %>% 
 	# filter(cases > 0, !is.na(rate_increase)) %>%
