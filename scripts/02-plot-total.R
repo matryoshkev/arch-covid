@@ -1,12 +1,12 @@
 # Plot confirmed cases for total St Louis metropolitan area
 
 # Dependencies
-# library("readr")
-# library("dplyr")
-# library("tidyr")
-# library("lubridate")
-# library("ggplot2")
-# library("gtable")
+library("readr")
+library("dplyr")
+library("tidyr")
+library("lubridate")
+library("ggplot2")
+library("gtable")
 
 # Read and format data
 data_metro <- read_csv("data/data-cases.csv") %>%
@@ -42,7 +42,10 @@ plot_new_cases <- data_metro %>%
 	geom_col() + 
 	labs(
 		y = "New confirmed cases", 
-		caption = (paste0("\n Data from Johns Hopkins University CSSE")) 
+		caption = (paste0(
+			"\n Data from Johns Hopkins University CSSE\n", 
+			"Plot by jeff smith Ph.D. https://github.com/matryoshkev/arch-covid"
+		)) 
 	) + 
 	my_theme
 pdf(file = NULL)  # start bug workaround
@@ -55,7 +58,7 @@ plot_metro <- gtable_add_grob(
 )
 dev.off()  # end bug workaround
 # dev.new(width = 5.5, height = 5)
-# plot(plot_metro)
+plot(plot_metro)
 ggsave("results/stl-total.pdf", plot_metro, device = "pdf", width = 5.5, height = 5)
 
 # Clean up
