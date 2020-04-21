@@ -2,7 +2,7 @@
 
 # TO DO: 
 # - order counties by population
-# - better y-axis breaks new cases?
+# - better y-axis breaks new cases
 # - show when cases below axis limit?
 
 # Dependencies
@@ -13,7 +13,7 @@ library("tidyr")
 library("ggplot2")
 library("gtable")
 
-lag_time <- 5  # How many days to average over
+lag_period <- 5  # How many days to average over
 
 # Case data
 data_cases <- read_csv("data/data-cases.csv") %>%
@@ -34,7 +34,7 @@ data_cases <- read_csv("data/data-cases.csv") %>%
 	) %>%
 	group_by(county) %>%
 	arrange(date, .by_group = TRUE) %>%
-	mutate(new_cases = (cases - lag(cases, n = lag_time)) / lag_time)
+	mutate(new_cases = (cases - lag(cases, n = lag_period)) / lag_period)
 
 # Testing data
 data_testing <- read_csv("data/data-testing.csv") %>% 
@@ -47,8 +47,8 @@ data_testing <- read_csv("data/data-testing.csv") %>%
 	group_by(state) %>%
 	arrange(date, .by_group = TRUE) %>%
 	mutate(
-		positive_new  = positive - lag(positive, n = lag_time), 
-		total_new     = total - lag(total, n = lag_time), 
+		positive_new  = positive - lag(positive, n = lag_period), 
+		total_new     = total - lag(total, n = lag_period), 
 		rate_positive = positive_new / total_new
 	)
 
@@ -63,12 +63,12 @@ plot_new_cases <- data_cases %>%
 	ggplot(mapping = aes(x = date, y = new_cases, color = county)) + 
 		facet_wrap(~ state, ncol = 2) + 
 		geom_line() + geom_point(size = 0.5) + 
-		scale_x_date(limits = date_limits, date_labels = "%e %b") + 
+		scale_x_date(limits = date_limits, date_labels = "%b %e") + 
 		scale_y_log10() + 
 		scale_color_hue(l = 50) + 
 		labs(
 			title = "COVID-19 activity in St Louis metro area", 
-			y = paste("New confirmed cases\n(average of past", lag_time, "days)")
+			y = paste("New confirmed cases\n(average of past", lag_period, "days)")
 		) + 
 		my_theme + theme(
 			# strip.background = element_blank(), 
@@ -82,10 +82,10 @@ plot_positive <- data_testing %>%
 		geom_line(color = grey(0.4)) + geom_point(color = grey(0.4), size = 0.75) + 
 		scale_x_date(limits = date_limits, date_labels = "%e %b") + 
 		scale_y_continuous(
-			limits = c(0, 1), breaks = seq(0, 1, by = 0.5)#, minor_breaks = seq(0, 1, by = 0.2)
+			limits = c(0, 1), breaks = seq(0, 1, by = 0.5) #, minor_breaks = seq(0, 1, by = 0.2)
 		) + 
 		labs(
-			y = paste("Fraction tests positive\n", "(past", lag_time, "days)"), 
+			y = paste("Fraction tests positive\n", "(past", lag_period, "days)"), 
 			caption = paste0(
 				"\n", "Cases are time-delayed undercount of total infections. ", 
 				"Cases are better indicator of virus activity when positive\ntest rate is stable. ", 
@@ -102,7 +102,7 @@ plot_activity <- gtable_add_grob(
 )
 dev.off()  # end bug workaround
 # dev.new(width = 6, height = 5)
-plot(plot_activity)
+# plot(plot_activity)
 ggsave("results/stl-activity.pdf", plot = plot_activity, width = 6, height = 5)
 ggsave("results/stl-activity.png", plot = plot_activity, width = 6, height = 5, units = "in")
 
@@ -120,7 +120,7 @@ ggsave("results/stl-activity.png", plot = plot_activity, width = 6, height = 5, 
 # plot(plot_cases)
 
 # Clean up
-rm(lag_time, data_cases, data_testing)
+rm(lag_period, data_cases, data_testing)
 rm(date_limits, my_theme, plot_new_cases, plot_positive, plot_activity)
 
 

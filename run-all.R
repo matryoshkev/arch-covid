@@ -6,8 +6,9 @@
 library("RCurl")
 library("readr")
 library("dplyr")
-library("lubridate")
 library("tidyr")
+library("lubridate")
+library("forcats")
 library("ggplot2")
 library("scales")
 library("gtable")
@@ -15,5 +16,6 @@ library("gtable")
 # Scripts
 source("scripts/01-get-data.R")
 source("scripts/02-plot-total.R")
+source("scripts/03-analyze-testing.R")
 
 

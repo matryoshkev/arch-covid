@@ -1,12 +1,12 @@
 # Plot confirmed cases for total St Louis metropolitan area
 
 # Dependencies
-library("readr")
-library("dplyr")
-library("tidyr")
-library("lubridate")
-library("ggplot2")
-library("gtable")
+# library("readr")
+# library("dplyr")
+# library("tidyr")
+# library("lubridate")
+# library("ggplot2")
+# library("gtable")
 
 # Read and format data
 data_metro <- read_csv("data/data-cases.csv") %>%
@@ -28,7 +28,7 @@ data_metro <- read_csv("data/data-cases.csv") %>%
 	filter(date > ymd("2020-03-01"))
 
 # Plot data
-my_theme <- theme(text = element_text(size = 10), axis.title.x = element_blank())
+my_theme <- theme(text = element_text(size = 9), axis.title.x = element_blank())
 plot_cases <- data_metro %>%
 	ggplot(mapping = aes(x = date, y = cases)) + 
 	geom_col() + 
@@ -43,8 +43,8 @@ plot_new_cases <- data_metro %>%
 	labs(
 		y = "New confirmed cases", 
 		caption = (paste0(
-			"\n Data from Johns Hopkins University CSSE\n", 
-			"Plot by jeff smith Ph.D. https://github.com/matryoshkev/arch-covid"
+			"\n", "Data from Johns Hopkins University CSSE" 
+			# "Plot by jeff smith Ph.D. https://github.com/matryoshkev/arch-covid"
 		)) 
 	) + 
 	my_theme
@@ -58,7 +58,7 @@ plot_metro <- gtable_add_grob(
 )
 dev.off()  # end bug workaround
 # dev.new(width = 5.5, height = 5)
-plot(plot_metro)
+# plot(plot_metro)
 ggsave("results/stl-total.pdf", plot_metro, device = "pdf", width = 5.5, height = 5)
 
 # Clean up
