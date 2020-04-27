@@ -17,5 +17,6 @@ library("gtable")
 source("scripts/01-get-data.R")
 source("scripts/02-plot-total.R")
 source("scripts/03-analyze-testing.R")
+source("scripts/04-plot-activity.R")
 
 
