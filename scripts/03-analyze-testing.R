@@ -53,7 +53,7 @@ plot_count <- data_testing %>%
 		geom_line() + geom_point(size = 0.75) + 
 		scale_x_date(date_labels = "%b %e") + 
 		# scale_y_log10(labels = scales::trans_format("log10", math_format(10^.x))) + 
-		scale_y_log10(limits = c(0.2, 1e4), minor_breaks = 10^c(1:5)) + 
+		scale_y_log10(limits = c(0.2, 5e4), minor_breaks = 10^c(1:5)) + 
 		labs(y = paste("Test count (average of last", lag_time, "days)")) + 
 		my_theme + 
 		theme(

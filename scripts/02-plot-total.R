@@ -19,7 +19,7 @@ data_metro <- read_csv("data/data-cases.csv") %>%
 			"Madison", "St. Clair", "Monroe", "Jersey", "Clinton"
 		))
 	) %>%
-	select(-c(UID, county_label)) %>% 
+	select(-c(county_label)) %>% 
 	pivot_longer(cols = contains("-"), names_to = "date", values_to = "cases") %>%
 	mutate(date = ymd(date)) %>%
 	group_by(date) %>%

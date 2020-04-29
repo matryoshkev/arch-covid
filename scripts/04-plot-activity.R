@@ -5,12 +5,12 @@
 # - show when cases below axis limit?
 
 # Dependencies
-library("readr")
-library("dplyr")
-library("lubridate")
-library("tidyr")
-library("ggplot2")
-library("gtable")
+# library("readr")
+# library("dplyr")
+# library("lubridate")
+# library("tidyr")
+# library("ggplot2")
+# library("gtable")
 
 lag_period <- 5  # How many days to average over
 
@@ -25,7 +25,7 @@ data_cases <- read_csv("data/data-cases.csv") %>%
 			"Madison", "St. Clair", "Monroe", "Jersey", "Clinton"
 		))
 	) %>%
-	select(-c(UID, county_label)) %>% 
+	select(-c(county_label)) %>% 
 	pivot_longer(cols = contains("-"), names_to = "date", values_to = "cases") %>%
 	mutate(
 		date = ymd(date), 
@@ -67,7 +67,7 @@ plot_new_cases <- data_cases %>%
 		geom_line() + geom_point(size = 0.5) + 
 		scale_x_date(limits = date_limits, date_labels = "%b %e") + 
 		scale_y_log10(
-			breaks = 10^c(1:4), minor_breaks = my_minor_breaks
+			breaks = 10^c(1:5), minor_breaks = my_minor_breaks
 		) + 
 		scale_color_hue(l = 50) + 
 		labs(
@@ -79,7 +79,7 @@ plot_new_cases <- data_cases %>%
 			# strip.text = element_blank(), 
 			legend.position = "top"
 		)
-plot_positive <- data_testing %>%
+plot_testing <- data_testing %>%
 	filter(!is.na(rate_positive)) %>% 
 	ggplot(mapping = aes(x = date, y = rate_positive)) + 
 		facet_wrap(~ state, ncol = 2) + 
@@ -101,7 +101,7 @@ plot_positive <- data_testing %>%
 pdf(file = NULL)  # start bug workaround
 plot_activity <- gtable_add_grob(
 	gtable(widths = unit(rep(1, 1), "null"), heights = unit(rep(1, 19), "null")), 
-	list(ggplotGrob(plot_new_cases), ggplotGrob(plot_positive)), 
+	list(ggplotGrob(plot_new_cases), ggplotGrob(plot_testing)), 
 	l = c(1, 1), r = c(1, 1), t = c(1, 13), b = c(12, 19)
 )
 dev.off()  # end bug workaround
@@ -126,7 +126,7 @@ ggsave("results/stl-activity.png", plot = plot_activity, width = 6, height = 5, 
 
 # Clean up
 rm(lag_period, data_cases, data_testing)
-rm(date_limits, my_theme, my_minor_breaks, plot_new_cases, plot_positive, plot_activity)
+rm(date_limits, my_theme, my_minor_breaks, plot_new_cases, plot_testing, plot_activity)
 
 
 
