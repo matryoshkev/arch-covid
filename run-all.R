@@ -14,9 +14,9 @@ library("scales")
 library("gtable")
 
 # Scripts
-source("scripts/01-get-data.R")
-source("scripts/02-plot-total.R")
-source("scripts/03-analyze-testing.R")
-source("scripts/04-plot-activity.R")
+source("01-get-data.R")
+source("02-plot-total.R")
+source("03-analyze-testing.R")
+source("04-plot-activity.R")
 
 
