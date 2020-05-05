@@ -5,12 +5,12 @@
 # - show when cases below axis limit?
 
 # Dependencies
-# library("readr")
-# library("dplyr")
-# library("lubridate")
-# library("tidyr")
-# library("ggplot2")
-# library("gtable")
+library("readr")
+library("dplyr")
+library("lubridate")
+library("tidyr")
+library("ggplot2")
+library("gtable")
 
 lag_period <- 5  # How many days to average over
 

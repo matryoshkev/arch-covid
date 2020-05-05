@@ -1,8 +1,8 @@
 # Dependencies: 
-# library("RCurl")
-# library("readr")
-# library("dplyr")
-# library("lubridate")
+library("RCurl")
+library("readr")
+library("dplyr")
+library("lubridate")
 
 
 # Define US metropolitan areas by county FIPS code (Federal Information Processing Standard)
