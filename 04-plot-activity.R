@@ -109,7 +109,7 @@ dev.off()  # end bug workaround
 # plot(plot_activity)
 
 ggsave("results/stl-activity.pdf", plot = plot_activity, width = 6, height = 5)
-ggsave("results/stl-activity.png", plot = plot_activity, width = 6, height = 5, units = "in")
+# ggsave("results/stl-activity.png", plot = plot_activity, width = 6, height = 5, units = "in")
 
 # Plot cumulative cases
 # dev.new(width = 5.5, height = 3)
