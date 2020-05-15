@@ -102,8 +102,8 @@ make_plots <- function(selected_metro) {
 		arrange(date, .by_group = TRUE) %>%
 		mutate(
 			new_cases = (cases - lag(cases, n = avg_period)) / avg_period, 
-			new_cases = if_else(new_cases < min_cases, 0, new_cases), 
-			new_cases_per_capita = new_cases / population
+			new_cases_per_capita = new_cases / population, 
+			new_cases = if_else(new_cases < min_cases, 0, new_cases)
 		) %>%
 		filter(!is.na(new_cases))
 

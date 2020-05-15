@@ -1,4 +1,3 @@
-
 # Dependencies: 
 library("RCurl")
 library("readr")
@@ -30,6 +29,17 @@ metro_area <- list(
 		17093   # Kendall County IL
 		# 17063	# Grundy County IL
 	), 
+	"Dallas-Fort Worth" = c(
+		48113,  # Dallas County TX
+		48439,  # Tarrant County TX
+		48085,  # Collin County TX
+		48121  # Denton County TX
+		# 48139,  # Ellis County TX
+		# 48251,  # Johnson County TX
+		# 48367,  # Parker County TX
+		# 48257  # Kaufman County TX
+		# and several smaller...
+	), 
 	"Detroit" = c(
 		26087,  # Lapeer County MI
 		26093,  # Livingston County MI
@@ -50,7 +60,8 @@ metro_area <- list(
 		# 48015   # Austin County TX
 	), 
 	"Los Angeles" = c(
-		6037  # Los Angeles County CA
+		6037,  # Los Angeles County CA
+		6059   # Orange County CA
 	), 
 	"Miami" = c(
 		12086,  # Miami-Dade County FL
@@ -115,6 +126,7 @@ data_cases <- data_cases %>%
 	mutate(metro = case_when(
 		FIPS %in% metro_area[["Atlanta"]]     ~ "Atlanta", 
 		FIPS %in% metro_area[["Chicago"]]     ~ "Chicago", 
+		FIPS %in% metro_area[["Dallas-Fort Worth"]] ~ "Dallas-Fort Worth", 
 		FIPS %in% metro_area[["Detroit"]]     ~ "Detroit", 
 		FIPS %in% metro_area[["Houston"]]     ~ "Houston", 
 		FIPS %in% metro_area[["Los Angeles"]] ~ "Los Angeles", 

@@ -23,14 +23,14 @@ library("scales")
 # Define parameters
 my_parameters <- c(
 	incubation_time   = 3.7,  # days
-	infectious_period = 3.5,   # days
-	R0 = 2
+	infectious_period = 5,   # days
+	R0 = 3
 )
 my_parameters <- c(my_parameters, 
 	transmission_rate = with(as.list(my_parameters), R0 / infectious_period)  # /day
 )
 total_pop <- 2.8e6
-initial_values <- c(S = total_pop - 100, E = 0, I = 100, R = 0)
+initial_values <- c(S = total_pop - 10, E = 0, I = 10, R = 0)
 
 # Calculate results
 my_model <- function(t, initial_values, parameters) {
@@ -76,9 +76,12 @@ my_plot <- my_results %>%
 			hjust = 0, vjust = 1.5, color = gray(0.6), size = 3
 		) + 
 		geom_line(size = 0.8) + 
-		scale_x_continuous(breaks = seq(0, 7*21, by = 30)) + 
+		scale_x_continuous(
+			limits = c(0, 120), 
+			breaks = seq(0, 7*21, by = 30)
+		) + 
 		scale_y_log10(
-			limits = c(1e-4, 1), breaks = 10^c(-6:0), minor_breaks = 10^c(-6:0), 
+			limits = c(1e-5, 1), breaks = 10^c(-6:0), minor_breaks = 10^c(-6:0), 
 			labels = scales::trans_format("log10", math_format(10^.x))
 		) + 
 		scale_color_manual(values = c(gray(0.2), "tomato3", "red", gray(0.65))) + 
