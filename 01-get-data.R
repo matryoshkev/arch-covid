@@ -1,3 +1,11 @@
+# TO DO: 
+# - Define statistical areas via code
+#   . delineation files from www.census.gov/programs-surveys/metro-micro/about/delineation-files.html
+#   . census.gov files indicate central/outlying
+#   . state abbrev, state names, county names in tidyverse::fips_codes
+# - FIPS codes should be character (issue at creation of data_cases)
+
+
 # Dependencies: 
 library("RCurl")
 library("readr")
@@ -17,6 +25,15 @@ metro_area <- list(
 		13117,  # Forsyth County GA
 		13151   # Henry County GA
 		# And many more, depending on how you count
+	), 
+	"Boston" = c(
+		25021,  # Norfolk County MA
+		25023,  # Plymouth County MA
+		25025,  # Suffolk County MA
+		25009,  # Essex County MA
+		25017,  # Middlesex County MA
+		33015,  # Rockingham County NH
+		33017   # Strafford County NH
 	), 
 	"Chicago" = c(
 		17031,  # Cook County IL
@@ -130,25 +147,15 @@ data_cases <- data_cases %>%
 		FIPS %in% metro_area[["Detroit"]]     ~ "Detroit", 
 		FIPS %in% metro_area[["Houston"]]     ~ "Houston", 
 		FIPS %in% metro_area[["Los Angeles"]] ~ "Los Angeles", 
+		FIPS %in% metro_area[["Boston"]] ~ "Boston", 
 		FIPS %in% metro_area[["Miami"]]       ~ "Miami", 
+		FIPS %in% metro_area[["New Hampshire"]] ~ "New Hampshire", 
 		FIPS %in% metro_area[["New Orleans"]] ~ "New Orleans", 
 		FIPS %in% metro_area[["New York"]]    ~ "New York", 
 		FIPS %in% metro_area[["Seattle"]]     ~ "Seattle", 
 		FIPS %in% metro_area[["St. Louis"]]   ~ "St. Louis" 
 	))
 
-
-# Get case testing data 
-# from The COVID Tracking Project (a project of The Atlantic)
-# https://covidtracking.com
-
-data_testing <- RCurl::getURL("https://covidtracking.com/api/v1/states/daily.csv")
-data_testing <- readr::read_csv(data_testing)  
-write_csv(data_testing, "data/data-testing-raw.csv")
-data_testing <- data_testing %>% 
-	select(date, state, positive, negative, totalTestResults) %>%
-	rename(total = totalTestResults) %>%
-	mutate(date = ymd(date))  
 
 
 # Get population data
@@ -170,6 +177,24 @@ data_population <- data_population %>%
 
 data_cases <- left_join(data_cases, data_population, by = "FIPS") %>%
 	select(FIPS, county, state, population, everything())
+
+
+# Get case testing data 
+# from The COVID Tracking Project (a project of The Atlantic)
+# https://covidtracking.com
+
+data_testing <- RCurl::getURL("https://covidtracking.com/api/v1/states/daily.csv")
+data_testing <- readr::read_csv(data_testing)  
+write_csv(data_testing, "data/data-testing-raw.csv")
+data_testing <- data_testing %>% 
+	select(date, state, positive, negative, totalTestResults) %>%
+	rename(total = totalTestResults) %>%
+	mutate(date = ymd(date))  
+
+state_names <- fips_codes %>%
+	select(state, state_name) %>%
+	distinct()
+
 
 
 # Write data to files
