@@ -31,6 +31,7 @@ focus_areas <- c(
 	33100, # Miami
 	33460, # Minneapolis
 	35380, # New Orleans
+	35620, # New York CIty
 	38060, # Phoenix
 	37980, # Philadelphia
 	41180, # St. Louis
