@@ -80,7 +80,7 @@ plot_cases_per_capita_base <- ggplot() +
 	) + 
 	my_theme + theme(legend.position = "bottom")
 
-plot_testing_base <- ggplot(mapping = aes(x = date, y = rate_negative, color = state)) + 
+plot_testing_base <- ggplot(mapping = aes(x = date, y = rate_negative, color = state_abbrev)) + 
 	geom_line() + geom_point(size = 0.75) + 
 	scale_x_date(limits = c(min_date, NA), date_labels = "%b %e") + 
 	scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.5)) + 
@@ -113,7 +113,7 @@ make_plots <- function(selected_CBSA_code) {
 
 	selected_data_CBSA <- data_cases %>%
 		filter((CBSA_code == selected_CBSA_code) & (central_or_outlying_county == "Central")) %>% 
-		select(county, state, population, contains("-")) %>% 
+		select(county, state, state_abbrev, population, contains("-")) %>% 
 		pivot_longer(cols = contains("-"), names_to = "date", values_to = "cases") %>%
 		mutate(date = ymd(date))
 
@@ -154,8 +154,8 @@ make_plots <- function(selected_CBSA_code) {
 		# )
 
 	selected_testing <- data_testing %>%
-		filter(state %in% unique(selected_cases$state)) %>%
-		group_by(state) %>%
+		filter(state_abbrev %in% unique(selected_cases$state_abbrev)) %>%
+		group_by(state_abbrev) %>%
 		arrange(date, .by_group = TRUE) %>%
 		mutate(
 			positive_new  = positive - lag(positive, n = avg_period), 

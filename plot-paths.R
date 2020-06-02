@@ -45,11 +45,6 @@ focus_areas <- c(
 	# distinct()
 
 # Find population sizes for all CBSAs
-# data_population <- data_cases %>%
-	# filter(!is.na(metro)) %>%
-	# select(metro, population, county) %>%
-	# group_by(metro) %>%
-	# summarize(population = sum(population))
 data_population <- data_cases %>%
 	filter(!is.na(CBSA_title)) %>%
 	select(CBSA_code, CBSA_title, population) %>%
@@ -92,41 +87,6 @@ make_log_labels <- function(x) {
 		# as.expression(bquote(paste(" "[10], .(log10(x)))))
 	}
 }
-# plot_base <- ggplot() + 
-	# geom_line(size = 0.75) + 
-	# scale_x_date(limits = c(ymd("2020-03-01"), NA), date_labels = "%b %e") + 
-	# scale_y_log10(
-		# breaks = 10^c(-9:0), minor_breaks = 10^c(-9:0), 
-		# labels = sapply(10^c(-9:0), make_log_labels)
-	# ) + 
-	# scale_color_hue(l = 60) + 
-	# my_theme 
-
-# # Plot data
-# plot_cumulative_cases <- plot_base %+% 
-	# subset(data_metro, cases_per_capita > 0) + 
-	# aes(x = date, y = cases_per_capita, color = metro) + 
-	# labs(y = "Cumulative cases per capita\n") + 
-	# theme(legend.position = "top")
-# plot_new_cases <- plot_base %+% 
-	# subset(data_metro, new_cases_per_capita > 0) + 
-	# aes(x = date, y = new_cases_per_capita, color = metro) + 
-	# labs(y = paste0("New cases per capita\n(", avg_period, " day avg.) ")) + 
-	# theme(legend.position = "none")
-# pdf(file = NULL)  # start bug workaround
-# plot_combined <- gtable_add_grob(
-	# gtable(widths = unit(rep(1, 1), "null"), heights = unit(rep(1, 19), "null")), 
-	# list(ggplotGrob(plot_cumulative_cases), ggplotGrob(plot_new_cases)), 
-	# l = c(1, 1), r = c(1, 1), t = c(1, 13), b = c(12, 19)
-# )
-# dev.off()  # end bug workaround
-# if (dev.cur() < 2) {dev.new(width = 5, height = 6)}
-# plot(plot_combined)
-
-# ggsave("results/metro-paths.pdf", plot = plot_combined, width = 5, height = 6)
-
-
-# A different way: 
 
 plot_base <- ggplot() + 
 	geom_line(size = 0.5, color = gray(0.75)) + 
@@ -173,13 +133,10 @@ for (selected_metro in unique(data_metro$CBSA_title)) {
 # if (dev.cur() < 2) {dev.new(width = 5, height = 6)}
 # plot(plot_combined_focus)
 
-# str_extract("St. Primary City-others-maybe, ST", "^[.a-zA-Z\\s]+") 
-
 
 # Clean up
 # rm(data_cases, data_population, data_metro, avg_period)
 # rm(my_theme, make_log_labels, plot_base, plot_cumulative_cases, plot_new_cases, plot_combined)
-
 
 # plot_new_cases_increase <- subset(data_metro, is.finite(new_cases_increase)) %>%
 	# ggplot() + 
@@ -192,7 +149,6 @@ for (selected_metro in unique(data_metro$CBSA_title)) {
 	# ) + 
 	# scale_color_hue(l = 60) + 
 	# my_theme
-
 
 # caption = paste0(
 	# "\n", "Cases are time-delayed undercount of total infections. ", 
