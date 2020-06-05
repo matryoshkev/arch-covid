@@ -1,6 +1,6 @@
 ---
 title: "Epidemiological dynamics of COVID-19 in St. Louis"
-author: "jeff smith and R. Fredrick Inglis"
+author: "jeff smith and R. Fredrik Inglis"
 output: 
   html_document:
     toc: true
@@ -88,7 +88,7 @@ The best way to measure how many people have protective immunity is to measure t
 
 This project is a collaboration between jeff smith, Ph.D. and [R. Fredrik Inglis](https://inglislab.umsl.edu/), Ph.D. in the Department of Biology at University of Missouri-St. Louis. We are research microbiologists studying microbial ecology and evolution. 
 
-Our reported case data comes from the [Johns Hopkins CSSE]() and our testing data comes from [The Covid Testing Project](). All of our code is available on [Github](https://github.com/matryoshkev/arch-covid). 
+Our reported case data comes from the [Johns Hopkins Center for Systems Science and Engineering](https://github.com/CSSEGISandData/COVID-19) and our testing data comes from [The Covid Tracking Project](https://covidtracking.com). All of our code is available on [Github](https://github.com/matryoshkev/arch-covid). 
 
 ```{r echo = FALSE}
 ## More resources
