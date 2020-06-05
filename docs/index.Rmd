@@ -42,19 +42,31 @@ Plots like these are often dominated by what's going on in places with the most 
 
 #### St. Louis City
 
-![](images/STL-new-cases.png){width=75%}
+![](images/STL-St.-Louis-city.png){width=75%}
 
 #### St. Louis County
 
-![](images/STL-new-cases.png){width=75%}
+![](images/STL-St.-Louis-County.png){width=75%}
+
+#### St. Clair County
+
+![](images/STL-St.-Clair-County.png){width=75%}
 
 #### St. Charles County
 
-![](images/STL-new-cases.png){width=75%}
+![](images/STL-St.-Charles-County.png){width=75%}
 
-#### Other counties
+#### Jefferson County
 
-![](images/STL-new-cases.png){width=75%}
+![](images/STL-Jefferson-County.png){width=75%}
+
+#### Madison County
+
+![](images/STL-Madison-County.png){width=75%}
+
+#### Monroe County
+
+![](images/STL-Monroe-County.png){width=75%}
 
 ### {-}
 
