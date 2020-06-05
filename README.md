@@ -4,3 +4,4 @@ We are developing graphical tools, real-time metrics, and statistical analyses t
 
 This project is a collaboration between jeff smith, Ph.D. and R. Fredrik Inglis, Ph.D. in the Department of Biology at University of Missouri-St. Louis. 
 
+Results are updated at [matryoshkev.github.io/arch-covid/](https://matryoshkev.github.io/arch-covid/)
