@@ -2,7 +2,8 @@
 
 # TO DO: 
 # - Clean up names and objects: plots, data, avg periods, etc
-# - Total tests vs time?
+# - Total tests vs time?  Ratio -ve/+ve? 
+# - Testing points with avg?
 
 # Dependencies
 library("readr")
