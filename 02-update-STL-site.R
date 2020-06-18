@@ -1,3 +1,8 @@
+# TO DO: 
+# + fix space in county plot filenames
+# - better testing effort measure
+# - red lines in front of grey lines
+
 # Dependencies
 library("readr")
 library("dplyr")
@@ -153,20 +158,16 @@ for (selected_county in unique(data_counties$county)) {
 	data_for_plot$focus_area <- relevel(factor(data_for_plot$focus_area), ref = "Other metro St. Louis")
 	plot_county <- plot_counties_base %+% data_for_plot
 	ggsave(
-		paste0("docs/images/STL-", selected_county, ".png"), 
+		paste0("docs/images/STL-", str_replace_all(selected_county, " ", "-"), ".png"), 
 		width = 5, height = 3
 	)
 }
 
+# Update web report
+rmarkdown::render("docs/index.Rmd", quiet = TRUE)
 
 # if (dev.cur() < 2) {dev.new(width = 5, height = 3)}
 # plot(plot_new_cases)
-
-
-
-
-# Update web report
-rmarkdown::render("docs/index.Rmd", quiet = TRUE)
 
 # Clean up
 # rm(data_cases, data_population, data_metro, avg_period)
