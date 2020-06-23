@@ -1,5 +1,4 @@
 # TO DO: 
-# + fix space in county plot filenames
 # - better testing effort measure
 # - red lines in front of grey lines
 
