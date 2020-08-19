@@ -56,7 +56,8 @@ data_cases <- inner_join(data_counties, data_cases, by = "FIPS")
 # from The COVID Tracking Project (a project of The Atlantic)
 # https://covidtracking.com
 
-data_testing <- RCurl::getURL("https://covidtracking.com/api/v1/states/daily.csv")
+# data_testing <- RCurl::getURL("https://covidtracking.com/api/v1/states/daily.csv")
+data_testing <- RCurl::getURL("https://api.covidtracking.com/v1/states/daily.csv")
 data_testing <- readr::read_csv(data_testing)  
 write_csv(data_testing, "data/data-testing-raw.csv")
 data_testing <- data_testing %>% 
