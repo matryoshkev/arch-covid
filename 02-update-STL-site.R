@@ -69,7 +69,8 @@ data_testing <- data_testing %>%
 		positive_new  = positive - lag(positive, n = avg_period), 
 		total_new     = total - lag(total, n = avg_period), 
 		rate_positive = positive_new / total_new, 
-		rate_negative = 1 - rate_positive
+		rate_negative = 1 - rate_positive, 
+		testing_effort = total_new / positive_new
 	) %>%
 	filter(!is.na(rate_positive))
 
@@ -129,11 +130,18 @@ ggsave("docs/images/STL-cumulative.png", width = 5, height = 3)
 # Plot testing effort
 plot_testing <- ggplot() %+% 
 	data_testing + 
-	aes(x = date, y = rate_negative, color = state) + 
+	# aes(x = date, y = rate_negative, color = state) + 
+	aes(x = date, y = testing_effort, color = state) + 
 	geom_line(size = 0.75) + 
 	scale_x_date(limits = c(ymd("2020-03-01"), NA), date_labels = "%b %e") + 
-	scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.5)) + 
-	labs(y = paste("Testing effort\n(fraction negative,", avg_period, "day average)")) + 
+	# scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.5)) + 
+	scale_y_log10(
+		limits = c(1, NA), 
+		breaks = c(1, 2, 5, 10, 20, 50), 
+		minor_breaks = c(1:9, c(1:9)*10)
+	) + 
+	# labs(y = paste("Testing effort\n(fraction negative,", avg_period, "day average)")) + 
+	labs(y = paste("Total tests per positive case\n(log scale,", avg_period, "day average)")) + 
 	my_theme + theme(
 		legend.title = element_blank(), 
 		legend.position = c(0.97, 0.03), 
