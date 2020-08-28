@@ -92,7 +92,10 @@ make_log_labels <- function(x) {
 }
 plot_base <- ggplot() + 
 	# geom_line(size = 0.5) + 
-	scale_x_date(limits = c(ymd("2020-03-01"), NA), date_labels = "%b %e") + 
+	scale_x_date(
+		limits = c(ymd("2020-03-01"), NA), date_breaks = "1 month", 
+		minor_breaks = NULL, date_labels = "%b" 
+	) + 
 	scale_y_log10(
 		breaks = 10^c(-9:0), minor_breaks = 10^c(-9:0), 
 		labels = sapply(10^c(-9:0), make_log_labels)
@@ -133,7 +136,11 @@ plot_testing <- ggplot() %+%
 	# aes(x = date, y = rate_negative, color = state) + 
 	aes(x = date, y = testing_effort, color = state) + 
 	geom_line(size = 0.75) + 
-	scale_x_date(limits = c(ymd("2020-03-01"), NA), date_labels = "%b %e") + 
+	# scale_x_date(limits = c(ymd("2020-03-01"), NA), date_labels = "%b %e") + 
+	scale_x_date(
+		limits = c(ymd("2020-03-01"), NA), date_breaks = "1 month", 
+		minor_breaks = NULL, date_labels = "%b" 
+	) + 
 	# scale_y_continuous(limits = c(0, 1), breaks = seq(0, 1, by = 0.5)) + 
 	scale_y_log10(
 		limits = c(1, NA), 
